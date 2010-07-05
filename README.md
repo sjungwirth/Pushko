@@ -11,11 +11,11 @@ Debugging
 ---------
 You can either turn on debugging by setting the third argument like so, to true:
 
-    $pusher->trigger('event', 'data', true)
+    $pusher->trigger('event', 'data', TRUE)
 
 or with all requests:
 
-    $pusher = new Pushko($key, $secret, $app_id, $channel, true);
+    $pusher = new Pushko($key, $secret, $app_id, $channel, TRUE);
 
 On failed requests, this will return the server's response, instead of false.
 

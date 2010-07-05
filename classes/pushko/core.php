@@ -45,9 +45,6 @@ abstract class Pushko_Core {
 			$port = '80', $timeout = 30 )
 	{
 
-		// Check compatibility, disable for speed improvement
-		$this->check_compatibility();
-
 		// Setup defaults
 		$this->settings['server']	= $host;
 		$this->settings['port']		= $port;
@@ -62,35 +59,16 @@ abstract class Pushko_Core {
 	}
 
 	/**
-	* Check if the current PHP setup is sufficient to run this class
-	*/
-	private function check_compatibility()
-	{
-
-		// Check for dependent PHP extensions (JSON, cURL)
-		if ( ! extension_loaded('curl') || ! extension_loaded('json'))
-		{
-			throw new Pushko_Exception('There is missing dependant extensions - please ensure both cURL and JSON modules are installed');
-		}
-
-		// Supports SHA256?
-		if ( ! in_array('sha256', hash_algos()))
-		{
-			throw new Pushko_Exception('SHA256 appears to be unsupported - make sure you have support for it, or upgrade your version of PHP.');
-		}
-	}
-
-	/**
-	* Trigger an event by providing event name and payload.
-	* Optionally provide a socket ID to exclude a client (most likely the sender).
-	*
-	* @param	string	$event
-	* @param	mixed	$payload
-	* @param	integer	$socket_id [optional]
-	* @param	string	$channel [optional]
-	* @param	boolean	$debug [optional]
-	* @return	mixed
-	*/
+	 * Trigger an event by providing event name and payload.
+	 * Optionally provide a socket ID to exclude a client (most likely the sender).
+	 *
+	 * @param	string	$event
+	 * @param	mixed	$payload
+	 * @param	integer	$socket_id [optional]
+	 * @param	string	$channel [optional]
+	 * @param	boolean	$debug [optional]
+	 * @return	mixed
+	 */
 	public function trigger( $event, $payload, $socket_id = NULL, $channel = '', $debug = FALSE )
 	{
 
@@ -148,11 +126,11 @@ abstract class Pushko_Core {
 	}
 
 	/**
-	* Creates a socket signature
-	*
-	* @param	integer	$socket_id
-	* @return	string
-	*/
+	 * Creates a socket signature
+	 *
+	 * @param	integer	$socket_id
+	 * @return	string
+	 */
 	public function socket_auth($socket_id)
 	{
 		$signature = hash_hmac(
