@@ -2,7 +2,7 @@
 
 /**
  * Pushko (Push[er]ko[hana])
- * This was a very simple PHP library to the Pusher API.
+ * This is a very simple PHP library for Kohana to the Pusher API
  *
  *    $pusher = new Pushko(APIKEY, SECRET, APP_ID, CHANNEL, [Debug: TRUE/FALSE, HOST, PORT]);
  *    $pusher->trigger('event_name', 'channel_name', [socket_id, Debug: TRUE/FALSE]);
