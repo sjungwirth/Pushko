@@ -1,12 +1,10 @@
-Pusher PHP Library
+Pushko - PHP Pusher API Library for Kohana 3+
 ==================
 
 This is a very simple PHP library to the Pusher API (http://pusherapp.com).
 Using it is easy as pie:
 
-    require('Pusher.php');
-
-    $pusher = new Pusher($key, $secret, $app_id, $channel);
+    $pusher = new Pushko($key, $secret, $app_id, $channel);
     $pusher->trigger('my_event', 'hello world');
 
 Debugging
@@ -17,7 +15,7 @@ You can either turn on debugging by setting the third argument like so, to true:
 
 or with all requests:
 
-    $pusher = new Pusher($key, $secret, $app_id, $channel, true);
+    $pusher = new Pushko($key, $secret, $app_id, $channel, true);
 
 On failed requests, this will return the server's response, instead of false.
 
@@ -35,5 +33,5 @@ In order to avoid duplicates you can optionally specify the sender's socket id w
 
 License
 -------
-Copyright 2010, Squeeks. Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php 
-
+Copyright 2010, 2bj. Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+Copyright 2010, Squeeks. Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
