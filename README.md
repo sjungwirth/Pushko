@@ -4,20 +4,8 @@ Pushko - PHP Pusher API Library for Kohana
 This is a very simple PHP library for Kohana to the Pusher API (http://pusherapp.com).
 Using it is easy as pie:
 
-    $pusher = new Pushko($key, $secret, $app_id, $channel);
-    $pusher->trigger('my_event', 'hello world');
-
-Debugging
----------
-You can either turn on debugging by setting the third argument like so, to true:
-
-    $pusher->trigger('event', 'data', TRUE)
-
-or with all requests:
-
-    $pusher = new Pushko($key, $secret, $app_id, $channel, TRUE);
-
-On failed requests, this will return the server's response, instead of false.
+	$pusher = Pushko::factory('test_channel');
+	$pusher->trigger('test_event', 'Hello, pushko!');
 
 Channels
 ---------
