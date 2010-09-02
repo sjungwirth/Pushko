@@ -1,7 +1,7 @@
 Pushko
 ==================
 
-This is a very simple Kohana module for the Pusher REST API (http://www.pusherapp.com)
+This is a very simple Kohana 3 module for the Pusher REST API (http://www.pusherapp.com)
 
 Using it is easy as pie:
 
