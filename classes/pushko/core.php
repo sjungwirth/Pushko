@@ -56,7 +56,7 @@ abstract class Pushko_Core {
 			$name = self::$default_config_name;
 		}
 
-		$this->_config = Kohana::config('pushko')->$name;
+		$this->_config = Kohana::$config->load('pushko')->$name;
 
 		if ( ! isset($this->_config['app_id'])		OR
 			   $this->_config['app_id'] === NULL	OR
