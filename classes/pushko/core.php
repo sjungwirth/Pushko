@@ -56,7 +56,7 @@ abstract class Pushko_Core {
 			$name = self::$default_config_name;
 		}
 
-		$this->_config = Kohana::$config->load('pushko')->$name;
+		$this->_config = Kohana::$config->load('pusher')->$name;
 
 		if ( ! isset($this->_config['app_id'])		OR
 			   $this->_config['app_id'] === NULL	OR
@@ -165,17 +165,30 @@ abstract class Pushko_Core {
 	 * Creates a socket signature
 	 *
 	 * @param	integer	$socket_id
-	 * @return	string
+	 * @param	mixed	$data
+	 * @return	array
 	 */
-	public function socket_auth($socket_id)
+	public function socket_auth($socket_id, $data = null)
 	{
-		$signature = hash_hmac(
-			'sha256', $socket_id.':'.$this->_config['channel'],
-			$this->_config['secret'],
-			FALSE
-		);
-		$signature = array('auth' => $this->_config['auth_key'].':'.$signature);
+		if ($data)
+		{
+			$data = (is_string($data) ? $data : json_encode($data));
+		}
 
-		return json_encode($signature);
+		$signature = array(
+			'auth' => $this->_config['auth_key'].':'.hash_hmac(
+				'sha256', $socket_id.':'.$this->_config['channel'].($data?':'.$data:null),
+				$this->_config['secret'],
+				FALSE
+			),
+		);
+
+		// add the custom data if it has been supplied
+		if ($data)
+		{
+			$signature['channel_data'] = $data;
+		}
+
+		return $signature;
 	}
 }
