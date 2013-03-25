@@ -51,7 +51,7 @@ abstract class Pushko_Core {
 	{
 		if ($name === NULL)
 		{
-			$name = self::$default_config_name;
+			$name = Pushko::$default_config_name;
 		}
 
 		$this->_config = Kohana::$config->load('pusher')->$name;
