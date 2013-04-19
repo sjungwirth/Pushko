@@ -82,7 +82,7 @@ abstract class Pushko_Core {
 	 * Optionally provide a socket ID to exclude a client (most likely the sender).
 	 * @throws Pushko_Exception
 	 *
-	 * @param	mixed	$channels
+	 * @param	mixed	$channels - string or array of channel names
 	 * @param	string	$event
 	 * @param	mixed	$data
 	 * @param	integer	$socket_id [optional]
