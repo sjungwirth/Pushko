@@ -104,7 +104,7 @@ abstract class Pushko_Core {
 		$request_params = array(
 			'data' => json_encode($data),
 			'name' => $event,
-			'channels' => (array) $channels,
+			'channels' => array_values((array) $channels),
 		);
 
 		// socketid
