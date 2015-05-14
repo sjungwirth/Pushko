@@ -78,6 +78,50 @@ abstract class Pushko_Core {
 	}
 
 	/**
+	 * Validate number of channels and channel name format.
+	 *
+	 * @param array $channels
+	 * @throws Pushko_Exception
+	 */
+	protected function validate_channels(array $channels)
+	{
+		if (count($channels) > 100)
+		{
+			throw new Pushko_Exception('An event can be triggered on a maximum of 100 channels in a single call.');
+		}
+
+		array_walk($channels, array($this, 'validate_channel' ) );
+	}
+
+	/**
+	 * Ensure a channel name is valid based on our spec
+	 *
+	 * @param $channel
+	 * @throws Pushko_Exception
+	 */
+	protected function validate_channel($channel)
+	{
+		if ( ! preg_match('/\A[-a-zA-Z0-9_=@,.;]+\z/', $channel))
+		{
+			throw new Pushko_Exception('Invalid channel name '.$channel);
+		}
+	}
+
+	/**
+	 * Ensure a socket_id is valid based on our spec
+	 *
+	 * @param $socket_id
+	 * @throws Pushko_Exception
+	 */
+	protected function validate_socket_id($socket_id)
+	{
+		if ($socket_id !== NULL && ! preg_match('/\A\d+\.\d+\z/', $socket_id))
+		{
+			throw new Pushko_Exception('Invalid socket ID '.$socket_id);
+		}
+	}
+
+	/**
 	 * Trigger an event by providing event name and payload.
 	 * Optionally provide a socket ID to exclude a client (most likely the sender).
 	 * @throws Pushko_Exception
@@ -91,12 +135,8 @@ abstract class Pushko_Core {
 	 */
 	public function trigger($channels, $event, $data, $socket_id = NULL, $debug = FALSE)
 	{
-		// Check if we can initialize a cURL connection
-		$ch = curl_init();
-		if ($ch === FALSE)
-		{
-			throw new Pushko_Exception('Could not initialise cURL!');
-		}
+		$this->validate_channels($channels);
+		$this->validate_socket_id($socket_id);
 
 		$path = $this->_config['api'].'/events';
 
@@ -122,6 +162,12 @@ abstract class Pushko_Core {
 
 		$url = $this->_config['server'].':'.$this->_config['port'].$path.'?'.$signed_query;
 
+		// Check if we can initialize a cURL connection
+		$ch = curl_init();
+		if ($ch === FALSE)
+		{
+			throw new Pushko_Exception('Could not initialise cURL!');
+		}
 		// Set cURL opts and execute request
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
@@ -148,6 +194,10 @@ abstract class Pushko_Core {
 		}
 	}
 
+	/**
+	 * @return bool|stdClass
+	 * @throws Pushko_Exception
+	 */
 	public function get_channels()
 	{
 		// Check if we can initialize a cURL connection
@@ -188,6 +238,11 @@ abstract class Pushko_Core {
 		return $response;
 	}
 
+	/**
+	 * @param $channel
+	 * @return bool|stdClass
+	 * @throws Pushko_Exception
+	 */
 	public function get_channel_stats($channel)
 	{
 		// Check if we can initialize a cURL connection
@@ -230,10 +285,10 @@ abstract class Pushko_Core {
 	/**
 	 * Creates a socket signature
 	 *
-	 * @param	string	$channel
-	 * @param	integer	$socket_id
-	 * @param	mixed	$data
-	 * @return	array
+	 * @param    string  $channel
+	 * @param    integer $socket_id
+	 * @param    mixed   $data
+	 * @return   array
 	 */
 	public function socket_auth($channel, $socket_id, $data = null)
 	{
@@ -242,6 +297,9 @@ abstract class Pushko_Core {
 			// encode the data
 			$data = (is_string($data) ? $data : json_encode($data));
 		}
+
+		$this->validate_channel($channel);
+		$this->validate_socket_id($socket_id);
 
 		$auth = array(
 			'auth' => $this->_config['auth_key'].':'.hash_hmac(
