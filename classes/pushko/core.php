@@ -135,7 +135,7 @@ abstract class Pushko_Core {
 	 */
 	public function trigger($channels, $event, $data, $socket_id = NULL, $debug = FALSE)
 	{
-		$this->validate_channels($channels);
+		$this->validate_channels((array) $channels);
 		$this->validate_socket_id($socket_id);
 
 		$path = $this->_config['api'].'/events';
